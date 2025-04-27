@@ -9,7 +9,7 @@ const validateToken = (req,res,next) => {
 
     try{
         const token = req.headers.authorization.split(' ')[1];
-        console.log('token :::' , token);
+        // console.log('token :::' , token);
 
         if (!token){
             console.log('authentication failed');
@@ -17,13 +17,13 @@ const validateToken = (req,res,next) => {
         }
 
         const decodeToken = jwt.verify(token , 'supersecretkey');
-        console.log('decoded token' , decodeToken);
+        // console.log('decoded token' , decodeToken);
         req.userData = { userId:decodeToken.id };
         next();
 
     } catch(err){
-        console.log('Auth failed');
-        return next(new Error('Authentication failed' , 401));
+        console.log('token verification failed');
+        return next(new Error('Authentication failed' , 403));
 
     }
 

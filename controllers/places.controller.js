@@ -23,6 +23,13 @@ const deletePlace = async(req, res, next) => {
       return next(error);
   }
 
+
+
+  if (place.creator._id.toString() != req.userData.userId){
+    return next(new Error('you are not authorized to perform this task.' , 401));
+  }
+
+
   if (!place){
     const error = new Error('Could not find the place.' , 404);
     return next(error);
@@ -64,14 +71,18 @@ const deletePlace = async(req, res, next) => {
 
 
 //UPDATE PLACE
-const updatePlace = async(req, res, next) => {
+const updatePlace = async (req, res, next) => {
   const { title, description } = req.body;
   const { pid } = req.params;
 
   let place;
+  let identifiedPlace;
   try{
     place = await placeModel.updateOne({ _id:pid }, { $set:{ title:title , description:description }});
-    console.log('updated place :' , place);
+    // console.log('updated place :' , place);
+
+    identifiedPlace = await placeModel.findById(pid);
+    // console.log("identified place:" , identifiedPlace);
   }
   catch(err) {
     const error = new Error('Something went wrong, Could not find a place.' , 500);
@@ -86,6 +97,10 @@ const updatePlace = async(req, res, next) => {
   // identifiedPlace.description = description;
 
   // DUMMY_PLACES[index] = identifiedPlace;
+
+  if (identifiedPlace.creator.toString() != req.userData.userId){
+    return next(new Error('ERR: Unauthorized; you are not allowed to perform this action.' , 401));
+  }
 
   place.title = title;
   place.description = description;
