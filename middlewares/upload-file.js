@@ -22,7 +22,7 @@ const storage_ = multer.diskStorage({
 });
 
 const fileUpload = multer({
-  limits:500000,
+  limits:{ fileSize: 5 * 1024 * 1024 },
   storage:storage_,
   fileFilter:(req,file,cb) => {
     const isValid =  !!MIME_TYPE_MAP[file.mimetype];

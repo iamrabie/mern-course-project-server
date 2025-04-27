@@ -81,10 +81,16 @@ const createUser = async (req, res, next) => {
   // }
 
   if (!doesUserExists) {
+
+    //iat , issued at -- same token regardless of the time.
+    const token = jwt.sign({id:createdUser.id , email:createdUser.email} , 'supersecretkey' , {expiresIn:'1h'});
+    // console.log('jwt token generated wheb the user signs up' , token);
+
     const result = await createdUser.save();
     res.status(201).json({
       message: "User created successfully",
       data: createdUser.toObject({ getters: true }),
+      token:token,
       success: true,
       code: 201,
     });
@@ -100,8 +106,7 @@ const createUser = async (req, res, next) => {
 
 
   // console.log('sign up info for user' , createdUser.id , createdUser.email);
-  const token = jwt.sign({id:createdUser.id , email:createdUser.email , iat:12345} , 'supersecretkey' , {expiresIn:'1h'});
-  // console.log('jwt token generated wheb the user signs up' , token);
+
 };
 
 
@@ -158,7 +163,7 @@ const loginUser = async (req, res, next) => {
   
   // console.log('sign up info for user' , existingUser.id , existingUser.email);
 
-  const token = jwt.sign({id:existingUser.id , email:existingUser.email , iat:12345} , 'supersecretkey' , {expiresIn:'1h'});
+  const token = jwt.sign({id:existingUser.id , email:existingUser.email} , 'supersecretkey' , {expiresIn:'1h'});
   // console.log('token generated on user login' , token);
 
   // if the user exists and the credentials are valid then login, return success = true
