@@ -16,7 +16,7 @@ const validateToken = (req,res,next) => {
             return next(new Error('Authentication failed'));
         }
 
-        const decodeToken = jwt.verify(token , 'supersecretkey');
+        const decodeToken = jwt.verify(token , process.env.JWT_SECRET_KEY);
         // console.log('decoded token' , decodeToken);
         req.userData = { userId:decodeToken.id };
         next();

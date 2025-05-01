@@ -1,0 +1,8 @@
+{
+    "env":{
+        "DB_USER":"iamrabie",
+        "DB_PASSWORD":"iamprodeveloper",
+        "DB_NAME":"MERN",
+        "JWT_SECRET_KEY":"supersecretkey"
+    }
+}
